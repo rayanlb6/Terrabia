@@ -104,8 +104,8 @@ DATABASES = {
     """'default': dj_database_url.config(
         default=os.getenv('postgresql://terrabiauser:qKSGcpZ6Vop6pxpOSBWoC5GWQpcUJgcm@dpg-d4ttfb2dbo4c73aih1t0-a.frankfurt-postgres.render.com/terrabia')
     )"""
-    
-    'default': dj_database_url.parse('postgres://terrabiauser:terrabiapass@dpg-xyz.render.com/terrabia')
+
+    'default': dj_database_url.parse('postgresql://terrabiauser:qKSGcpZ6Vop6pxpOSBWoC5GWQpcUJgcm@dpg-d4ttfb2dbo4c73aih1t0-a.frankfurt-postgres.render.com/terrabia')
 }
 
 # ----------------------------------------------------
