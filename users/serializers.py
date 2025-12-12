@@ -1,20 +1,28 @@
 from rest_framework import serializers
 from .models import User
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, min_length=8)
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    # Champ de confirmation du mot de passe (non mappé au modèle)
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     class Meta:
         model = User
-        fields = ("id","username","email","role","phone","password","first_name","last_name")
-        read_only_fields = ("id",)
+        fields = ['id', 'username', 'email', 'password', 'password2', 'role', 'phone']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def validate(self, data):
+        # Validation que les deux mots de passe correspondent
+        if data['password'] != data.pop('password2'):
+            raise serializers.ValidationError({"password": "Les mots de passe ne correspondent pas."})
+        return data
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
+        # Création de l'utilisateur avec un mot de passe hashé
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email'),
+            password=validated_data['password'],
+            role=validated_data.get('role', 'acheteur'), # Définit 'acheteur' si non fourni
+            phone=validated_data.get('phone', None)
+        )
         return user

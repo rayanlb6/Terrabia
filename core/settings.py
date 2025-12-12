@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'orders',
     'ratings',
     'chat',
+    'payments',
 ]
 
 # ----------------------------------------------------

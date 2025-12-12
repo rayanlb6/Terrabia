@@ -18,8 +18,29 @@ class LigneCommande(models.Model):
     quantite = models.PositiveIntegerField()
     prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2)
 
+# Modèle Livraison
 class Livraison(models.Model):
-    commande = models.ForeignKey(Commande, on_delete=models.CASCADE, related_name='livraison')
-    agence = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='livraisons')
-    statut = models.CharField(max_length=20, default='en_attente')
-    updated_at = models.DateTimeField(auto_now=True)
+    commande = models.OneToOneField(Commande, on_delete=models.CASCADE, related_name='livraison')
+    # agence est un User avec le rôle 'livraison'
+    agence = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, # Ne pas supprimer la commande si l'agence est supprimée
+        null=True, 
+        blank=True, 
+        limit_choices_to={'role': 'livraison'},
+        related_name='livraisons_gerees'
+    )
+    # Les statuts possibles de la livraison
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('attribuee', 'Attribuée'),
+        ('en_transit', 'En transit'),
+        ('livree', 'Livrée'),
+        ('echec', 'Échec de livraison'),
+    ]
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_mise_a_jour = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Livraison pour Commande #{self.commande.id} - Statut: {self.statut}"
