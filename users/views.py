@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from .serializers import UserRegistrationSerializer
 from .models import User
 from rest_framework import viewsets # Pour UserViewSet
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserSerializer
 
 # --- VueSet Standard ---
 class UserViewSet(viewsets.ModelViewSet):
@@ -36,3 +39,10 @@ class UserRegistrationView(generics.CreateAPIView):
             "user": UserRegistrationSerializer(user, context=self.get_serializer_context()).data,
             "message": "Inscription réussie. Connectez-vous."
         }, status=status.HTTP_201_CREATED)
+
+class AuthMeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)

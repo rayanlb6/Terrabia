@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'change_me_dev_key')
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["192.168.255.7"]
 
 # ----------------------------------------------------
 # APPLICATIONS
@@ -88,7 +88,7 @@ TEMPLATES = [
 # ----------------------------------------------------
 # DATABASE
 # ----------------------------------------------------
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -100,14 +100,26 @@ DATABASES = {
     }
 }
 import dj_database_url
-
+"""
+"""
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('postgresql://terrabiauser:qKSGcpZ6Vop6pxpOSBWoC5GWQpcUJgcm@dpg-d4ttfb2dbo4c73aih1t0-a.frankfurt-postgres.render.com/terrabia')
     )
 
    # 'default': dj_database_url.parse('postgresql://terrabiauser:qKSGcpZ6Vop6pxpOSBWoC5GWQpcUJgcm@dpg-d4ttfb2dbo4c73aih1t0-a.frankfurt-postgres.render.com/terrabia')
+}"""
+
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default="postgresql://terrabiauser:qKSGcpZ6Vop6pxpOSBWoC5GWQpcUJgcm@dpg-d4ttfb2dbo4c73aih1t0-a.frankfurt-postgres.render.com:5432/terrabia",
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
+
 
 # ----------------------------------------------------
 # USER MODEL

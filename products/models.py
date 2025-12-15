@@ -9,6 +9,8 @@ class Produit(models.Model):
     description = models.TextField(blank=True)
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField()
+    categorie = models.CharField(max_length=50, default='Légumes')  # Ajoutez ce champ
+    unite = models.CharField(max_length=20, default='kg')  # Ajoutez ce champ
     image = models.ImageField(upload_to='produits/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

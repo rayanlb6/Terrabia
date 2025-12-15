@@ -8,7 +8,11 @@ class Commande(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     statut = models.CharField(max_length=20, default='en_attente')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
+    # AJOUTEZ CES DEUX CHAMPS
+    adresse_livraison = models.TextField(blank=True, default='')
+    notes = models.TextField(blank=True, default='')
+    
     def __str__(self):
         return f"Commande #{self.id} - {self.acheteur}"
 
@@ -17,20 +21,21 @@ class LigneCommande(models.Model):
     produit = models.ForeignKey('products.Produit', on_delete=models.PROTECT)
     quantite = models.PositiveIntegerField()
     prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __str__(self):
+        return f"{self.quantite}x {self.produit.nom}"
 
-# Modèle Livraison
 class Livraison(models.Model):
     commande = models.OneToOneField(Commande, on_delete=models.CASCADE, related_name='livraison')
-    # agence est un User avec le rôle 'livraison'
     agence = models.ForeignKey(
         User, 
-        on_delete=models.SET_NULL, # Ne pas supprimer la commande si l'agence est supprimée
+        on_delete=models.SET_NULL,
         null=True, 
         blank=True, 
         limit_choices_to={'role': 'livraison'},
         related_name='livraisons_gerees'
     )
-    # Les statuts possibles de la livraison
+    
     STATUT_CHOICES = [
         ('en_attente', 'En attente'),
         ('attribuee', 'Attribuée'),
@@ -41,6 +46,6 @@ class Livraison(models.Model):
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
     date_creation = models.DateTimeField(auto_now_add=True)
     date_mise_a_jour = models.DateTimeField(auto_now=True)
-
+    
     def __str__(self):
         return f"Livraison pour Commande #{self.commande.id} - Statut: {self.statut}"

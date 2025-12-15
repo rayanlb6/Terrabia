@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
+from users.views import AuthMeView
 
 # Importations des Views
 # Note: Nous supposons que ces vues existent dans les fichiers appropriés.
@@ -39,7 +40,8 @@ urlpatterns = [
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # POST /api/auth/register/ (Ajouté)
     path('api/auth/register/', UserRegistrationView.as_view(), name='register'),
-    
+    path('api/auth/me/', AuthMeView.as_view(), name='auth_me'),
+
     # --- 3. URLS GÉRÉES PAR LE ROUTER (products/, cart/, orders/, ratings/, messages/, deliveries/) ---
     path('api/', include(router.urls)), 
     
