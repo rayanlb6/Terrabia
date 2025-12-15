@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'change_me_dev_key')
 DEBUG = False
 
-ALLOWED_HOSTS = ["192.168.255.7"]
+ALLOWED_HOSTS = [ "terrabia-x358.onrender.com","localhost","127.0.0.1",]
 
 # ----------------------------------------------------
 # APPLICATIONS
@@ -46,15 +46,18 @@ INSTALLED_APPS = [
 # ----------------------------------------------------
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://terrabia-x358.onrender.com"
 ]
 
 # ----------------------------------------------------
@@ -126,7 +129,7 @@ DATABASES = {
 # ----------------------------------------------------
 
 AUTH_USER_MODEL = 'users.User'
-
+CORS_ALLOW_ALL_ORIGINS = True
 # ----------------------------------------------------
 # INTERNATIONALISATION
 # ----------------------------------------------------
